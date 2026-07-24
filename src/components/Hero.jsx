@@ -64,7 +64,7 @@ export function Hero({ movies }) {
     <div className="relative w-full h-[85vh] min-h-[600px] flex items-center rounded-3xl overflow-hidden mb-12 border border-gray-800/50">
       {/* Background Poster Wall */}
       {hasMovies && (
-        <div className="absolute inset-0 z-0 flex gap-4 p-4 transform-gpu scale-110 pointer-events-none">
+        <div className="absolute inset-0 z-0 flex gap-4 p-4 transform-gpu scale-100 md:scale-110 pointer-events-none">
           <Column movies={col1} direction="up" speed="120s" />
           <Column movies={col2} direction="down" speed="90s" />
           <Column movies={col3} direction="up" speed="150s" />
@@ -79,7 +79,7 @@ export function Hero({ movies }) {
 
       {/* Text Panel */}
       <motion.div 
-        className="relative z-10 w-full md:w-[60%] lg:w-[50%] px-8 md:px-16 flex flex-col items-start"
+        className="relative z-10 w-full md:w-[60%] lg:w-[50%] px-6 md:px-16 flex flex-col items-center text-center md:items-start md:text-left"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -88,11 +88,11 @@ export function Hero({ movies }) {
           <Logo className="h-10" />
         </motion.div>
         
-        <motion.h1 variants={itemVariants} className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+        <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
           Your next obsession is waiting.
         </motion.h1>
         
-        <motion.p variants={itemVariants} className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-lg">
+        <motion.p variants={itemVariants} className="text-base sm:text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0">
           Watchlyst curates the world's most talked-about movies. Explore trending hits, unearth hidden gems, and build your ultimate watchlist—all in one place.
         </motion.p>
         
@@ -101,7 +101,7 @@ export function Hero({ movies }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleExplore}
-          className="bg-accent hover:bg-accent/90 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] transition-shadow duration-300 cursor-pointer"
+          className="w-full md:w-auto bg-accent hover:bg-accent/90 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] transition-shadow duration-300 cursor-pointer"
         >
           Find Movies
         </motion.button>

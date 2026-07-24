@@ -87,7 +87,7 @@ export function Browse() {
           </div>
         </div>
         
-        <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar">
+        <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar touch-pan-x">
           {trendingLoading ? (
             Array(10).fill(0).map((_, i) => (
               <div key={i} className="w-[160px] sm:w-[200px] flex-shrink-0 snap-start">
@@ -114,7 +114,7 @@ export function Browse() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
           {popular.map((movie, index) => (
             <MovieCard key={`${movie.id}-${index}`} movie={movie} index={index} />
           ))}

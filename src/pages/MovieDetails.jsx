@@ -124,7 +124,7 @@ export function MovieDetails() {
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8 -mt-24 md:-mt-32 relative z-10">
+      <div className="flex flex-col md:flex-row gap-8 px-4 md:px-8 -mt-16 sm:-mt-24 md:-mt-32 relative z-10">
         {/* Poster */}
         <div className="w-48 md:w-72 flex-shrink-0 mx-auto md:mx-0">
           <div className="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-900 bg-gray-800">
@@ -145,7 +145,7 @@ export function MovieDetails() {
 
         {/* Details */}
         <div className="flex-1 pt-2 md:pt-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{movie.title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{movie.title}</h1>
           <p className="text-xl text-gray-400 italic mb-6">{movie.tagline}</p>
           
           <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300 mb-8">
@@ -187,7 +187,7 @@ export function MovieDetails() {
             </div>
             
             {hasProviders ? (
-              <div className="flex flex-col sm:flex-row gap-6 sm:gap-12">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-12">
                 {renderProviderSection("Stream", streamProviders)}
                 {renderProviderSection("Rent", rentProviders)}
                 {renderProviderSection("Buy", buyProviders)}
@@ -222,7 +222,7 @@ export function MovieDetails() {
       {cast.length > 0 && (
         <div className="px-4 md:px-8 mt-8">
           <h2 className="text-2xl font-bold text-white mb-6">Top Cast</h2>
-          <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar">
+          <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar touch-pan-x">
             {cast.map(actor => (
               <div key={actor.id} className="w-[120px] sm:w-[140px] flex-shrink-0 snap-start text-center">
                 <div className="aspect-[2/3] rounded-xl overflow-hidden bg-gray-800 mb-2 border border-gray-800">
@@ -244,7 +244,7 @@ export function MovieDetails() {
       {recommendations.length > 0 && (
         <div className="px-4 md:px-8 mt-8">
           <h2 className="text-2xl font-bold text-white mb-6">You Might Also Like</h2>
-          <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar">
+          <div className="flex overflow-x-auto gap-4 pb-4 snap-x custom-scrollbar touch-pan-x">
             {recommendations.map((rec, i) => (
               <div key={rec.id} className="w-[160px] sm:w-[200px] flex-shrink-0 snap-start">
                 <MovieCard movie={rec} index={i} />
