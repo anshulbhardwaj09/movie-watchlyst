@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1e1b4b;
+  --color-accent: #6366f1;
+  --animate-orb-1: orb-1 25s ease-in-out infinite alternate;
+  --animate-orb-2: orb-2 20s ease-in-out infinite alternate;
+  --animate-orb-3: orb-3 28s ease-in-out infinite alternate;
+  --animate-orb-4: orb-4 22s ease-in-out infinite alternate;
+  --animate-orb-5: orb-5 26s ease-in-out infinite alternate;
+  --animate-marquee-up: marquee-up 60s linear infinite;
+  --animate-marquee-down: marquee-down 60s linear infinite;
+}
+
+@keyframes marquee-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes marquee-down {
+  0% { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes orb-1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate3d(15vw, 10vh, 0) scale(1.1); opacity: 0.5; }
+  66% { transform: translate3d(-10vw, 20vh, 0) scale(0.9); opacity: 0.4; }
+  100% { transform: translate3d(-5vw, -5vh, 0) scale(1.05); opacity: 0.3; }
+}
+
+@keyframes orb-2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate3d(-15vw, -10vh, 0) scale(1.1); opacity: 0.4; }
+  66% { transform: translate3d(10vw, -20vh, 0) scale(0.9); opacity: 0.5; }
+  100% { transform: translate3d(5vw, 15vh, 0) scale(1); opacity: 0.3; }
+}
+
+@keyframes orb-3 {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate3d(10vw, -15vh, 0) scale(1.2); opacity: 0.5; }
+  66% { transform: translate3d(20vw, 10vh, 0) scale(0.8); opacity: 0.4; }
+  100% { transform: translate3d(-10vw, 5vh, 0) scale(1.1); opacity: 0.3; }
+}
+
+@keyframes orb-4 {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate3d(-20vw, 10vh, 0) scale(0.9); opacity: 0.4; }
+  66% { transform: translate3d(-5vw, -15vh, 0) scale(1.1); opacity: 0.5; }
+  100% { transform: translate3d(15vw, 10vh, 0) scale(1); opacity: 0.3; }
+}
+
+@keyframes orb-5 {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate3d(15vw, 20vh, 0) scale(1.1); opacity: 0.5; }
+  66% { transform: translate3d(-15vw, -10vh, 0) scale(0.9); opacity: 0.4; }
+  100% { transform: translate3d(-5vw, 15vh, 0) scale(1); opacity: 0.3; }
+}
+
+@layer base {
+  body {
+    @apply bg-gray-900 text-white min-h-screen font-sans;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-900 rounded-full;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-700 rounded-full hover:bg-gray-600 transition-colors;
+  }
+}
+
