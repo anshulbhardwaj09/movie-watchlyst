@@ -51,7 +51,7 @@ export function MovieCard({ movie, index = 0 }) {
             </div>
           )}
           
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           
           <button 
             onClick={toggleFavorite}
@@ -63,7 +63,7 @@ export function MovieCard({ movie, index = 0 }) {
             />
           </button>
   
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-sm font-medium text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-sm font-medium text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
             <Star size={14} className="fill-yellow-500 text-yellow-500" />
             <span>{movie.vote_average?.toFixed(1)}</span>
           </div>

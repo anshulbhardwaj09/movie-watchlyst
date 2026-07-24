@@ -186,7 +186,7 @@ export function Browse() {
         </section>
 
         {/* FilterBar Section */}
-        <section className="relative z-10">
+        <section className="relative z-30">
           <FilterBar 
             type={type}
             onTypeChange={handleTypeChange}
