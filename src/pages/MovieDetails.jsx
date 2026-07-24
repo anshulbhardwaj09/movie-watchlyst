@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Star, Clock, Calendar, ArrowLeft, Heart, Play, ExternalLink } from 'lucide-react';
 import { getMovieDetails, getImageUrl } from '../services/tmdb';
 import { MovieCard } from '../components/MovieCard';
@@ -10,6 +10,8 @@ import { PageTransition } from '../components/PageTransition';
 export function MovieDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const contentType = location.pathname.startsWith('/tv') ? 'tv' : 'movie';
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +22,7 @@ export function MovieDetails() {
     let isMounted = true;
     setLoading(true);
     window.scrollTo(0, 0); 
-    getMovieDetails(id)
+    getMovieDetails(id, contentType)
       .then(data => {
         if(isMounted) {
           setMovie(data);
@@ -29,12 +31,12 @@ export function MovieDetails() {
       })
       .catch(err => {
         if(isMounted) {
-          setError("Failed to load movie details.");
+          setError("Failed to load details.");
           setLoading(false);
         }
       });
     return () => { isMounted = false; };
-  }, [id]);
+  }, [id, contentType]);
 
   if (loading) {
     return (
@@ -53,7 +55,7 @@ export function MovieDetails() {
   }
 
   if (error || !movie) {
-    return <div className="text-center text-red-500 py-10">{error || "Movie not found"}</div>;
+    return <div className="text-center text-red-500 py-10">{error || "Not found"}</div>;
   }
 
   const backdropUrl = getImageUrl(movie.backdrop_path, 'original');
@@ -65,13 +67,16 @@ export function MovieDetails() {
     else addFavorite(movie);
   };
 
+  const displayTitle = movie.title || movie.name;
+  const displayDate = movie.release_date || movie.first_air_date;
+  const releaseYear = displayDate ? displayDate.split('-')[0] : 'N/A';
+  const runtime = movie.runtime ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : (movie.episode_run_time?.[0] ? `${movie.episode_run_time[0]}m/ep` : '');
+
   const cast = movie.credits?.cast?.slice(0, 10) || [];
   const recommendations = movie.recommendations?.results?.slice(0, 10) || [];
   
-  // 1. Trailer
   const trailer = movie.videos?.results?.find(vid => vid.type === "Trailer" && vid.site === "YouTube");
 
-  // 2. Providers (US Region)
   const providersData = movie['watch/providers']?.results?.US;
   const tmdbLink = providersData?.link;
   const streamProviders = providersData?.flatrate || [];
@@ -145,7 +150,7 @@ export function MovieDetails() {
 
         {/* Details */}
         <div className="flex-1 pt-2 md:pt-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{movie.title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{displayTitle}</h1>
           <p className="text-xl text-gray-400 italic mb-6">{movie.tagline}</p>
           
           <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300 mb-8">

@@ -19,7 +19,13 @@ export function MovieCard({ movie, index = 0 }) {
   };
 
   const imageUrl = getImageUrl(movie.poster_path, 'w500');
-  const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+  const displayTitle = movie.title || movie.name;
+  const displayDate = movie.release_date || movie.first_air_date;
+  const releaseYear = displayDate ? displayDate.split('-')[0] : 'N/A';
+  
+  // Determine route based on media_type or if it has a 'name' (TV) vs 'title' (Movie)
+  const mediaType = movie.media_type || (movie.name && !movie.title ? 'tv' : 'movie');
+  const route = `/${mediaType}/${movie.id}`;
 
   return (
     <motion.div
@@ -30,12 +36,12 @@ export function MovieCard({ movie, index = 0 }) {
       whileHover={{ scale: 1.05 }}
       className="group relative flex flex-col gap-2 rounded-xl h-full cursor-pointer"
     >
-      <Link to={`/movie/${movie.id}`} className="flex flex-col h-full focus:outline-none">
+      <Link to={route} className="flex flex-col h-full focus:outline-none">
         <div className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-gray-800 shadow-lg border border-gray-700/50 group-hover:shadow-xl group-hover:border-accent/50 transition-all duration-300">
           {imageUrl ? (
             <img 
               src={imageUrl} 
-              alt={movie.title} 
+              alt={displayTitle} 
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
@@ -64,7 +70,7 @@ export function MovieCard({ movie, index = 0 }) {
         </div>
   
         <div className="flex flex-col px-1 mt-3">
-          <h3 className="font-semibold text-white truncate" title={movie.title}>{movie.title}</h3>
+          <h3 className="font-semibold text-white truncate" title={displayTitle}>{displayTitle}</h3>
           <p className="text-sm text-gray-400">{releaseYear}</p>
         </div>
       </Link>

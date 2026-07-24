@@ -15,6 +15,7 @@ const apiClient = axios.create({
 const mockMovie = {
   id: 1,
   title: "Mock Movie (API Blocked)",
+  name: "Mock TV Show",
   overview: "Your ISP is currently blocking the TMDB API. We are showing placeholder data.",
   // Use a generic movie-like placeholder from Unsplash since TMDB images might be blocked too
   poster_path: null, 
@@ -47,9 +48,61 @@ const fallbackResponse = {
   total_pages: 1
 };
 
-export const getTrending = async (timeWindow = 'day', page = 1, options = {}) => {
+export const getTrending = async (contentType = 'movie', timeWindow = 'day', page = 1, options = {}) => {
   try {
-    const res = await apiClient.get(`/trending/movie/${timeWindow}`, { params: { page }, ...options });
+    const res = await apiClient.get(`/trending/${contentType}/${timeWindow}`, { params: { page }, ...options });
+    return res.data;
+  } catch (err) {
+    console.warn("TMDB API Error, using fallback data.");
+    return fallbackResponse;
+  }
+};
+
+export const getDiscover = async (contentType = 'movie', params = {}, options = {}) => {
+  try {
+    // Check if we need to do multiple language queries (client-side merge for South Indian)
+    if (params.with_original_language && params.with_original_language.includes(',')) {
+      const langs = params.with_original_language.split(',');
+      const promises = langs.map(lang => 
+        apiClient.get(`/discover/${contentType}`, { 
+          params: { ...params, with_original_language: lang }, 
+          ...options 
+        })
+      );
+      
+      const responses = await Promise.all(promises);
+      let allResults = [];
+      responses.forEach(res => {
+        allResults = [...allResults, ...(res.data?.results || [])];
+      });
+
+      // Deduplicate by ID just in case
+      const uniqueResults = Array.from(new Map(allResults.map(item => [item.id, item])).values());
+      
+      // Sort by the requested sort parameter (default popularity.desc)
+      const sortBy = params.sort_by || 'popularity.desc';
+      uniqueResults.sort((a, b) => {
+        if (sortBy === 'vote_average.desc') return (b.vote_average || 0) - (a.vote_average || 0);
+        if (sortBy === 'primary_release_date.desc' || sortBy === 'first_air_date.desc') {
+          const dateA = new Date(a.release_date || a.first_air_date || 0);
+          const dateB = new Date(b.release_date || b.first_air_date || 0);
+          return dateB - dateA;
+        }
+        return (b.popularity || 0) - (a.popularity || 0);
+      });
+
+      // Assume page 1 total_pages is standard API response structure
+      return {
+        results: uniqueResults,
+        page: params.page || 1,
+        // Since we are merging, pagination becomes highly complex. 
+        // For simplicity in this demo, we can just say total_pages is whatever the max was.
+        total_pages: Math.max(...responses.map(r => r.data?.total_pages || 1))
+      };
+    }
+
+    // Standard single query
+    const res = await apiClient.get(`/discover/${contentType}`, { params, ...options });
     return res.data;
   } catch (err) {
     console.warn("TMDB API Error, using fallback data.");
@@ -77,9 +130,9 @@ export const searchMovies = async (query, page = 1, options = {}) => {
   }
 };
 
-export const getMovieDetails = async (id, options = {}) => {
+export const getMovieDetails = async (id, contentType = 'movie', options = {}) => {
   try {
-    const res = await apiClient.get(`/movie/${id}`, { params: { append_to_response: 'credits,recommendations,videos,watch/providers' }, ...options });
+    const res = await apiClient.get(`/${contentType}/${id}`, { params: { append_to_response: 'credits,recommendations,videos,watch/providers' }, ...options });
     return res.data;
   } catch (err) {
     console.warn("TMDB API Error, using fallback data.");
@@ -87,9 +140,9 @@ export const getMovieDetails = async (id, options = {}) => {
   }
 };
 
-export const getGenres = async (options = {}) => {
+export const getGenres = async (contentType = 'movie', options = {}) => {
   try {
-    const res = await apiClient.get('/genre/movie/list', { ...options });
+    const res = await apiClient.get(`/genre/${contentType}/list`, { ...options });
     return res.data;
   } catch (err) {
     console.warn("TMDB API Error, using fallback data.");
